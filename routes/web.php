@@ -19,7 +19,8 @@ Route::get('/', function () {
 
 // Dashboard setelah login (user biasa)
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $musics = \App\Models\Music::all();
+    return view('dashboard', compact('musics'));
 })->middleware(['auth'])->name('dashboard');
 
 // ======================
@@ -37,6 +38,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/music/{music}', [MusicController::class, 'show'])->name('music.show');
 
     // Memberi review
+    Route::get('/reviews/create/{music}', function($musicId) {
+        $music = \App\Models\Music::findOrFail($musicId);
+        return view('reviews.create', compact('music'));
+    })->middleware(['auth'])->name('reviews.create');
     Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 });
 

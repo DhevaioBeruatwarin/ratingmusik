@@ -4,7 +4,7 @@
 @section('content')
 <div class="container">
     <h1>Edit Musik</h1>
-    <form action="{{ route('music.update', $music->id) }}" method="POST">
+    <form action="{{ route('admin.music.update', $music->id) }}" method="POST">
         @csrf
         @method('PUT')
         <div class="mb-3">
