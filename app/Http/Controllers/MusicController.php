@@ -67,15 +67,17 @@ class MusicController extends Controller
         $music = Music::findOrFail($id);
         $music->update($request->only('title', 'artist', 'genre'));
 
-        return redirect()->route('admin.music.index')->with('success', 'Musik berhasil diperbarui!');
+        return redirect()->route('admin.dashboard')->with('success', 'Musik berhasil diperbarui!');
     }
 
     // Hapus musik
     public function destroy($id)
     {
         $music = Music::findOrFail($id);
+        // Hapus semua review terkait
+        $music->reviews()->delete();
         $music->delete();
 
-        return redirect()->route('admin.music.index')->with('success', 'Musik berhasil dihapus!');
+        return redirect()->route('admin.dashboard')->with('success', 'Musik dan semua review terkait berhasil dihapus!');
     }
 }

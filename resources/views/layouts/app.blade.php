@@ -13,9 +13,23 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <style>
+            body {
+                min-height: 100vh;
+                background: linear-gradient(90deg, #6dd5ed 0%, #8f6ed5 100%);
+                /* Jika ingin pakai gambar, gunakan: */
+                /* background: url('/path/to/your/bg.jpg') no-repeat center center fixed; background-size: cover; */
+            }
+            .min-h-screen {
+                min-height: 100vh;
+            }
+            main > div, .main-content {
+                padding-top: 16px !important;
+            }
+        </style>
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
+        <div class="min-h-screen">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
@@ -29,8 +43,9 @@
 
             <!-- Page Content -->
             <main>
-                {{ $slot }}
+                @yield('content')
             </main>
         </div>
+        {{ $slot }}
     </body>
 </html>

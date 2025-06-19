@@ -19,7 +19,8 @@ Route::get('/', function () {
 
 // Dashboard setelah login (user biasa)
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $musics = \App\Models\Music::all();
+    return view('dashboard', compact('musics'));
 })->middleware(['auth'])->name('dashboard');
 
 // ======================
@@ -37,6 +38,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/music/{music}', [MusicController::class, 'show'])->name('music.show');
 
     // Memberi review
+    Route::get('/reviews/create/{music}', function($musicId) {
+        $music = \App\Models\Music::findOrFail($musicId);
+        return view('reviews.create', compact('music'));
+    })->middleware(['auth'])->name('reviews.create');
     Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 });
 
@@ -46,7 +51,9 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     // Dashboard admin
     Route::get('/dashboard', function () {
-        return view('admin.dashboard');
+        $musics = \App\Models\Music::all();
+        $reviews = \App\Models\Review::with('music')->get();
+        return view('admin.dashboard', compact('musics', 'reviews'));
     })->name('dashboard');
 
     // CRUD Musik oleh Admin
@@ -56,6 +63,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/music/{music}/edit', [MusicController::class, 'edit'])->name('music.edit');
     Route::put('/music/{music}', [MusicController::class, 'update'])->name('music.update');
     Route::delete('/music/{music}', [MusicController::class, 'destroy'])->name('music.destroy');
+
+    // Route hapus review (admin)
+    Route::delete('/reviews/{review}', [\App\Http\Controllers\ReviewController::class, 'destroy'])->name('reviews.destroy');
 });
 
 require __DIR__ . '/auth.php';
