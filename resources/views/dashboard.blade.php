@@ -101,8 +101,9 @@
                                 <td style="padding:8px;border:1px solid #e5e7eb;">{{ $music->title }}</td>
                                 <td style="padding:8px;border:1px solid #e5e7eb;">{{ $music->artist }}</td>
                                 <td style="padding:8px;border:1px solid #e5e7eb;">{{ $music->genre }}</td>
-                                <td style="padding:8px;border:1px solid #e5e7eb;">
+                                <td style="padding:8px;border:1px solid #e5e7eb;display:flex;gap:8px;">
                                     <a href="{{ route('reviews.create', ['music' => $music->id]) }}" style="background:#6366f1;color:#fff;padding:6px 16px;border-radius:6px;text-decoration:none;font-weight:500;">Review</a>
+                                    <a href="{{ route('music.show', $music->id) }}" style="background:#f59e42;color:#fff;padding:6px 16px;border-radius:6px;text-decoration:none;font-weight:500;">Lihat Reviews</a>
                                 </td>
                             </tr>
                             @endforeach

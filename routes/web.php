@@ -51,7 +51,9 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     // Dashboard admin
     Route::get('/dashboard', function () {
-        return view('admin.dashboard');
+        $musics = \App\Models\Music::all();
+        $reviews = \App\Models\Review::with('music')->get();
+        return view('admin.dashboard', compact('musics', 'reviews'));
     })->name('dashboard');
 
     // CRUD Musik oleh Admin
@@ -61,6 +63,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/music/{music}/edit', [MusicController::class, 'edit'])->name('music.edit');
     Route::put('/music/{music}', [MusicController::class, 'update'])->name('music.update');
     Route::delete('/music/{music}', [MusicController::class, 'destroy'])->name('music.destroy');
+
+    // Route hapus review (admin)
+    Route::delete('/reviews/{review}', [\App\Http\Controllers\ReviewController::class, 'destroy'])->name('reviews.destroy');
 });
 
 require __DIR__ . '/auth.php';

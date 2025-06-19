@@ -26,7 +26,7 @@ class ReviewController extends Controller
             'comment' => $request->comment,
         ]);
 
-        return redirect()->route('music.show', $request->music_id)->with('success', 'Review berhasil ditambahkan!');
+        return redirect()->route('dashboard')->with('success', 'Review berhasil ditambahkan!');
     }
 
     // Update review (opsional, hanya pemilik)
@@ -51,6 +51,12 @@ class ReviewController extends Controller
     public function destroy($id)
     {
         $review = Review::findOrFail($id);
+        // Jika admin, boleh hapus review apapun
+        if (Auth::user() && Auth::user()->role === 'admin') {
+            $review->delete();
+            return redirect()->route('admin.dashboard')->with('success', 'Review berhasil dihapus!');
+        }
+        // Jika user biasa, hanya boleh hapus review milik sendiri
         if ($review->user_id !== Auth::id()) {
             abort(403);
         }
